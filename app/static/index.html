@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Together mengubah prediksi risiko banjir menjadi misi relawan yang terukur."
+    />
+    <title>Together: Dari Prediksi ke Aksi</title>
+    <meta name="theme-color" content="#070b14" />
+    <meta name="color-scheme" content="dark" />
+    <link
+      rel="preload"
+      href="/static/fonts/merriweather-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark">T</span>
+        <span class="brand-text">
+          <strong>Together</strong>
+          <small>Dari prediksi risiko ke aksi relawan</small>
+        </span>
+      </a>
+      <nav class="header-nav">
+        <a href="#papan-misi">Papan Misi</a>
+        <a href="#tentang">Tentang</a>
+        <a href="#panduan">Panduan</a>
+        <a href="#berita">Berita</a>
+        <a href="#riwayat">Riwayat</a>
+        <span class="health-pill" id="health-pill">
+          <span class="dot"></span> Menghubungkan…
+        </span>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero-band">
+        <div class="hero">
+        <div class="hero-copy">
+          <h1>
+            Prediksi risiko banjir.<br />
+            Ubah menjadi misi relawan.
+          </h1>
+          <p class="lede">
+            Masukkan parameter hidrologi. Model klasifikasi menghitung tingkat
+            risiko, lalu Together otomatis membuka misi dengan kebutuhan dan
+            kuota relawan yang jelas. Dirancang untuk Bandung, dengan fondasi
+            yang siap diperluas ke bencana lain.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-link" href="#prediksi">Mulai prediksi</a>
+            <a class="ghost-link" href="#papan-misi">Lihat misi aktif</a>
+          </div>
+        </div>
+
+        <dl class="stats" aria-label="Statistik Together">
+          <div class="stat">
+            <dt class="stat-label">Misi aktif</dt>
+            <dd>
+              <strong id="stat-misi">0</strong>
+              <small>terbuka untuk relawan</small>
+            </dd>
+          </div>
+          <div class="stat">
+            <dt class="stat-label">Relawan</dt>
+            <dd>
+              <strong id="stat-relawan">0</strong>
+              <small>terdaftar di semua misi</small>
+            </dd>
+          </div>
+          <div class="stat">
+            <dt class="stat-label">Prediksi</dt>
+            <dd>
+              <strong id="stat-prediksi">0</strong>
+              <small>total tersimpan</small>
+            </dd>
+          </div>
+          <div class="stat">
+            <dt class="stat-label">24 jam</dt>
+            <dd>
+              <strong id="stat-harian">0</strong>
+              <small>prediksi terbaru</small>
+            </dd>
+          </div>
+        </dl>
+        </div>
+      </section>
+
+      <div class="page">
+      <section class="workspace">
+        <article class="panel form-panel" id="prediksi">
+          <div class="panel-head">
+            <h2>Prediksi risiko</h2>
+            <span class="tag">RandomForest</span>
+          </div>
+
+          <div class="result hidden" id="prediction-result" aria-live="polite">
+            <div class="result-head">
+              <div class="score-block">
+                <span id="result-score">0</span>
+                <small>/100</small>
+              </div>
+              <div class="result-copy">
+                <h3 id="result-title">Risiko terdeteksi</h3>
+                <p id="result-recommendation"></p>
+              </div>
+            </div>
+            <div class="risk-scale" id="risk-scale" aria-hidden="true">
+              <div class="risk-segments">
+                <span data-level="Aman">Aman</span>
+                <span data-level="Waspada">Waspada</span>
+                <span data-level="Siaga">Siaga</span>
+                <span data-level="Awas">Awas</span>
+              </div>
+              <div class="risk-track">
+                <span class="risk-marker" id="risk-marker"></span>
+              </div>
+            </div>
+            <div class="factors" id="result-factors"></div>
+            <div class="mission-created hidden" id="mission-created">
+              <div>
+                <strong>Misi otomatis dibuka.</strong>
+                <p id="mission-created-text"></p>
+              </div>
+              <a class="ghost-link small" href="#papan-misi">Lihat papan misi</a>
+            </div>
+          </div>
+
+          <form id="prediction-form">
+            <label class="field select-field">
+              <span>Wilayah</span>
+              <select name="wilayah" required>
+                <option value="Bojongloa Kaler">Bojongloa Kaler</option>
+                <option value="Buahbatu">Buahbatu</option>
+                <option value="Coblong">Coblong</option>
+                <option value="Andir">Andir</option>
+                <option value="Astanaanyar">Astanaanyar</option>
+                <option value="Babakan Ciparay">Babakan Ciparay</option>
+                <option value="Bandung Kidul">Bandung Kidul</option>
+                <option value="Bandung Kulon">Bandung Kulon</option>
+                <option value="Batununggal">Batununggal</option>
+                <option value="Cibeunying Kaler">Cibeunying Kaler</option>
+                <option value="Cibiru">Cibiru</option>
+                <option value="Cicendo">Cicendo</option>
+                <option value="Gedebage">Gedebage</option>
+                <option value="Kiaracondong">Kiaracondong</option>
+                <option value="Lengkong">Lengkong</option>
+                <option value="Rancasari">Rancasari</option>
+                <option value="Regol">Regol</option>
+                <option value="Sukajadi">Sukajadi</option>
+                <option value="Sumur Bandung">Sumur Bandung</option>
+                <option value="Ujungberung">Ujungberung</option>
+              </select>
+            </label>
+
+
+            <p class="hint" id="region-profile">Profil wilayah dipakai untuk mengisi elevasi dan permukaan kedap air.</p>
+
+            <fieldset class="choice-group">
+              <legend>Seberapa lebat hujan semalam?</legend>
+              <div class="choice-row">
+                <label class="choice">
+                  <input type="radio" name="hujan_preset" value="ringan" />
+                  <span><strong>Ringan</strong><small>Gerimis atau hujan sebentar</small></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="hujan_preset" value="sedang" checked />
+                  <span><strong>Sedang</strong><small>Hujan cukup lama</small></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="hujan_preset" value="lebat" />
+                  <span><strong>Lebat</strong><small>Deras dan lama</small></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="hujan_preset" value="ekstrem" />
+                  <span><strong>Ekstrem</strong><small>Sangat deras, hampir terus-menerus</small></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="choice-group">
+              <legend>Bagaimana kondisi air di sekitar?</legend>
+              <div class="choice-row">
+                <label class="choice">
+                  <input type="radio" name="air_preset" value="normal" />
+                  <span><strong>Normal</strong><small>Sungai dan drainase biasa</small></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="air_preset" value="naik" checked />
+                  <span><strong>Mulai naik</strong><small>Air mulai masuk ke jalan</small></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="air_preset" value="tinggi" />
+                  <span><strong>Tinggi</strong><small>Air setinggi lutut</small></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="air_preset" value="kritis" />
+                  <span><strong>Kritis</strong><small>Air cepat naik, hampir meluap</small></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="choice-group">
+              <legend>Seberapa lancar drainase?</legend>
+              <div class="choice-row">
+                <label class="choice">
+                  <input type="radio" name="drainase_preset" value="lancar" />
+                  <span><strong>Lancar</strong><small>Air cepat surut</small></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="drainase_preset" value="cukup" checked />
+                  <span><strong>Cukup</strong><small>Ada genangan sebentar</small></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="drainase_preset" value="tersumbat" />
+                  <span><strong>Tersumbat</strong><small>Sering tersumbat</small></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="drainase_preset" value="buruk" />
+                  <span><strong>Sangat buruk</strong><small>Air tidak mengalir</small></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <details class="advanced">
+              <summary>Atur angka teknis (opsional)</summary>
+              <p class="hint">Gunakan ini jika kamu punya data curah hujan, tinggi muka air, atau drainase yang lebih spesifik.</p>
+
+              <div class="field">
+                <div class="field-label">
+                  <span>Curah hujan 24 jam</span>
+                  <output id="rain-value">90 mm</output>
+                </div>
+                <input type="range" name="curah_hujan_mm" min="0" max="300" step="5" value="90" />
+              </div>
+
+              <div class="field">
+                <div class="field-label">
+                  <span>Tinggi muka air</span>
+                  <output id="tma-value">220 cm</output>
+                </div>
+                <input type="range" name="tma_cm" min="50" max="500" step="10" value="220" />
+              </div>
+
+              <div class="field">
+                <div class="field-label">
+                  <span>Kualitas drainase</span>
+                  <output id="drainase-value">6/10</output>
+                </div>
+                <input type="range" name="drainase_skor" min="0" max="10" step="1" value="6" />
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <div class="field-label">
+                    <span>Elevasi</span>
+                    <output id="elevasi-value">8 m</output>
+                  </div>
+                  <input type="range" name="elevasi_m" min="0" max="80" step="1" value="8" />
+                </div>
+                <div class="field">
+                  <div class="field-label">
+                    <span>Permukaan kedap air</span>
+                    <output id="impervious-value">85%</output>
+                  </div>
+                  <input type="range" name="impervious_pct" min="0" max="100" step="5" value="85" />
+                </div>
+              </div>
+            </details>
+
+            <button class="primary" type="submit" id="predict-button">
+              Hitung risiko
+            </button>
+            <p class="hint">
+              Data ini adalah simulasi. Bukan pengganti peringatan resmi BMKG/BNPB.
+            </p>
+          </form>
+
+        </article>
+
+        <article class="panel mission-panel" id="papan-misi">
+          <div class="panel-head">
+            <h2>Papan misi</h2>
+            <span class="tag" id="mission-count">0 misi</span>
+          </div>
+
+          <div class="filter-row" role="tablist" aria-label="Filter misi">
+            <button class="filter active" data-filter="semua" type="button">Semua</button>
+            <button class="filter" data-filter="Awas" type="button">Awas</button>
+            <button class="filter" data-filter="Siaga" type="button">Siaga</button>
+            <button class="filter" data-filter="dibuka" type="button">Dibuka</button>
+          </div>
+
+          <div class="mission-list" id="mission-list">
+            <div class="empty-state">Memuat misi…</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel about-panel" id="tentang">
+        <div class="panel-head">
+          <h2>Bagaimana Together memprediksi</h2>
+          <span class="tag">RandomForest</span>
+        </div>
+        <p class="section-lede">
+          Kamu tidak perlu menghitung angka teknis. Pilih kondisi yang paling mirip,
+          lalu Together memetakannya menjadi lima fitur numerik dan menghitung
+          probabilitas tiap level risiko.
+        </p>
+        <ol class="process-list">
+          <li>
+            <span>01</span>
+            <div>
+              <h3>Kondisi menjadi angka</h3>
+              <p>Pilihan hujan, tinggi air, dan drainase dipetakan ke curah hujan (mm), TMA (cm), dan skor drainase. Elevasi dan permukaan kedap air diambil dari profil wilayah, dan bisa diubah di mode ahli.</p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <h3>Model menghitung risiko</h3>
+              <p>RandomForest yang dilatih dengan scikit-learn menghasilkan probabilitas Aman, Waspada, Siaga, dan Awas. Skor 0 sampai 100 dihitung dari probabilitas tersebut.</p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <h3>Risiko menjadi aksi</h3>
+              <p>Jika level Siaga atau Awas, Together membuka misi relawan dengan kebutuhan, keahlian, dan kuota. Semua prediksi disimpan ke PostgreSQL.</p>
+            </div>
+          </li>
+        </ol>
+        <dl class="facts">
+          <div><dt>Model</dt><dd>RandomForest, 40 pohon, kedalaman 9</dd></div>
+          <div><dt>Data latih</dt><dd>4.000 sampel sintetis</dd></div>
+          <div><dt>Akurasi uji</dt><dd>Sekitar 0,789, bukan jaminan lapangan</dd></div>
+          <div><dt>Fitur</dt><dd>Curah hujan, TMA, drainase, elevasi, permukaan kedap air</dd></div>
+          <div><dt>Inferensi</dt><dd>Model JSON lokal di CPU, tanpa API AI eksternal</dd></div>
+          <div><dt>Batasan</dt><dd>Alat bantu keputusan untuk demo, bukan peringatan resmi</dd></div>
+        </dl>
+        <p class="hint">Selalu utamakan informasi resmi BMKG, BNPB, dan BPBD setempat.</p>
+      </section>
+
+      <section class="panel guide-panel" id="panduan">
+        <div class="panel-head">
+          <h2>Jika ada potensi banjir</h2>
+          <a class="ghost-link small" href="#papan-misi">Lihat misi aktif</a>
+        </div>
+        <p class="section-lede">
+          Panduan singkat untuk sebelum, saat, dan setelah banjir. Ikuti selalu
+          instruksi petugas dan informasi resmi di lapangan.
+        </p>
+        <div class="guide-grid">
+          <div class="guide-col">
+            <h3>Sebelum</h3>
+            <ul>
+              <li>Pantau BMKG, BPBD, dan kanal informasi warga.</li>
+              <li>Siapkan tas siaga: dokumen, obat, air, senter, dan power bank.</li>
+              <li>Kenali jalur evakuasi dan titik kumpul terdekat.</li>
+              <li>Amankan listrik, gas, dan barang penting.</li>
+              <li>Catat kontak darurat keluarga dan lingkungan.</li>
+            </ul>
+          </div>
+          <div class="guide-col">
+            <h3>Saat banjir</h3>
+            <ul>
+              <li>Matikan listrik dan gas jika air mulai masuk.</li>
+              <li>Jangan menerobos arus atau genangan deras.</li>
+              <li>Naik ke tempat tinggi dan ikuti instruksi petugas.</li>
+              <li>Hubungi 112 atau BPBD jika butuh bantuan.</li>
+              <li>Bantu anak, lansia, dan penyandang disabilitas.</li>
+            </ul>
+          </div>
+          <div class="guide-col">
+            <h3>Setelah</h3>
+            <ul>
+              <li>Hindari genangan yang berpotensi listrik dan kuman.</li>
+              <li>Bersihkan rumah dengan alat pelindung diri.</li>
+              <li>Jangan mengonsumsi air banjir.</li>
+              <li>Dokumentasikan kerusakan untuk laporan bantuan.</li>
+              <li>Laporkan kondisi ke RT, RW, atau BPBD.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="news-section" id="berita">
+        <div class="section-head">
+          <h2>Berita banjir Indonesia</h2>
+          <button class="ghost-link small" id="refresh-news" type="button">Muat ulang</button>
+        </div>
+        <p class="section-lede">
+          Judul dan ringkasan diambil dari feed publik CNN Indonesia, Antara, dan
+          Google News. Klik judul untuk membaca berita di sumber aslinya.
+        </p>
+        <div class="news-grid" id="news-list">
+          <div class="news-empty">Memuat berita…</div>
+        </div>
+      </section>
+
+      <section class="panel history-panel" id="riwayat">
+        <div class="panel-head">
+          <h2>Riwayat prediksi</h2>
+          <button class="ghost-link small" id="refresh-history" type="button">
+            Muat ulang
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>Wilayah</th>
+                <th>Hujan</th>
+                <th>TMA</th>
+                <th>Level</th>
+                <th>Skor</th>
+                <th>Misi</th>
+              </tr>
+            </thead>
+            <tbody id="history-body">
+              <tr>
+                <td colspan="7" class="empty-cell">Belum ada prediksi.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <span>Together, COMP6991031 Cloud Services, data dummy</span>
+      <span>FastAPI, scikit-learn, PostgreSQL, Redis, Docker Compose</span>
+      <span class="photo-credit">
+        Foto: <a
+          href="https://commons.wikimedia.org/wiki/File:Mackenzie_River_Outflow.jpg"
+          target="_blank"
+          rel="noreferrer"
+        >NASA/USGS Landsat 8</a>, public domain, via Wikimedia Commons
+      </span>
+    </footer>
+
+    <div class="modal hidden" id="join-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-card">
+        <button class="modal-close" id="modal-close" type="button" aria-label="Tutup">×</button>
+        <h2 id="modal-title">Nama misi</h2>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="modal-skill-block">
+          <span>Keahlian dibutuhkan</span>
+          <div class="chips" id="modal-skills"></div>
+        </div>
+        <form id="join-form">
+          <input type="hidden" name="misi_id" />
+          <label class="field">
+            <span>Nama relawan</span>
+            <input name="nama" required minlength="2" maxlength="120" placeholder="Nama dummy" />
+          </label>
+          <label class="field">
+            <span>Kontak dummy</span>
+            <input name="kontak" required minlength="6" maxlength="64" placeholder="0812-DUMMY-006" />
+          </label>
+          <label class="field">
+            <span>Keahlian (pisahkan dengan koma)</span>
+            <input name="keahlian" required placeholder="Logistik, Mengemudi" />
+          </label>
+          <p class="hint">
+            Gunakan data dummy. Jangan memasukkan NIK, alamat, atau nomor asli.
+          </p>
+          <button class="primary" type="submit" id="join-button">Kirim pendaftaran</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
