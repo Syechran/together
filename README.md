@@ -3,7 +3,7 @@
 Aplikasi web multi-tier yang mengubah **skor risiko banjir** menjadi **misi relawan yang terukur**. Model klasifikasi menghitung risiko dari parameter hidrologi; jika level mencapai **Siaga/Awas**, sistem otomatis membuka misi dengan kebutuhan, keahlian, dan kuota relawan. Relawan dapat bergabung sesuai keahlian, dan seluruh riwayat tersimpan di PostgreSQL.
 
 > Proyek UTS COMP6991031 Cloud Services — LA75, BINUS Bandung.
-> Kategori: **AI (Web + model ringan)**. Fokus penilaian: containerization, bukan banyaknya fitur.
+> Kategori: **AI (Web + model ringan)**.
 
 ![Dashboard Together](screenshots/dashboard.png)
 
