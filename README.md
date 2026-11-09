@@ -478,8 +478,6 @@ Draft Soal 1, artikel, video, checklist pengumpulan, dan referensi desain disimp
 
 ## 10. AI Usage Declaration
 
-> **Penting:** sesuaikan dengan kenyataan dan pastikan kamu dapat menjelaskan setiap baris Dockerfile/compose. Jangan mengklaim lebih dari porsi bantuan yang sebenarnya.
-
 - **Alat yang dipakai:** Kilo Code (model `deepseek-flash`), **Impeccable** (design review/detector), dan **Hallmark** (design skill/gate checker).
 - **Bagian yang dibantu:** brainstorming ide dan diferensiasi, scaffolding struktur proyek, implementasi awal FastAPI/SQLAlchemy/Redis, UI dashboard, audit desain, debugging error runtime, draf README/artikel/script video.
 - **Contoh prompt utama:** “Buat aplikasi multi-tier FastAPI + PostgreSQL + Redis dengan satu alur prediksi risiko banjir → misi relawan → gabung, Docker multi-stage, healthcheck, named volume, dan profil Adminer.”
